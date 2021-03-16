@@ -1,0 +1,268 @@
+WindowManager:
+	FirstWindow: 
+	SecondWindow:
+
+<ItemLabel@Label>:
+	font_size: '20'
+	color: 0, 0, 0, 1
+
+<FirstWindow>:
+	name: "first"
+	
+	GridLayout:
+		start_capital: input_capital
+		game_duration: input_duration
+		tax: input_tax
+
+		rows: 6
+
+		canvas.before:
+			Color:
+				rgba: (0.95, 0.95, 0.95, 0.95)
+			Rectangle:
+				pos: self.pos
+				size: self.size
+
+		AnchorLayout:
+			size_hint: 1, 0.1
+			Label:
+				font_size: "25"
+				text:  "Введите параметры игры"
+				color: 0, 0, 0, 1 
+	    GridLayout:
+	    	cols: 2
+	    	rows: 5
+	    	padding: 50
+	    	spacing: 50
+
+			ItemLabel:
+		    	text: "Начальный капитал, руб"
+			TextInput:
+				multiline: False
+				id: input_capital
+				input_type: 'number'
+				input_filter: 'int'
+			
+			ItemLabel:
+		    	text: "Длительность работы фонда, мес"
+			TextInput:
+				multiline: False
+				id: input_duration
+				input_type: 'number'
+				input_filter: 'int'
+			
+			ItemLabel:
+		    	text: "Процент налога на доход, %"
+			TextInput:
+				multiline: False
+				id: input_tax
+				input_type: 'number'
+				input_filter: 'int'
+
+			ItemLabel:
+		    	text: "Степень изменчивость на рынке"
+			TextInput:
+				multiline: False
+				input_type: 'number'
+				input_filter: 'int'
+
+			ItemLabel:
+		    	text: "Начальная структура портфеля"
+			TextInput:
+				multiline: False
+				input_type: 'number'
+				input_filter: 'int'
+
+		BoxLayout:
+			size_hint: (0.9, 0.15)
+			color: 0, 1, 0, 1
+			padding: [240, 0, 240, 30]
+			Button:
+				text: 'НАЧАТЬ ИГРУ'
+				on_press:
+					app.root.current = "second"
+					root.manager.transition.direction = "left"
+					root.tmp()
+
+<SecondWindow>:
+	name: "second"
+	GridLayout:
+		rows: 3
+		#cols: 1
+
+		canvas.before:
+			Color:
+				rgba: (0.95, 0.95, 0.95, 0.95)
+			Rectangle:
+				pos: self.pos
+				size: self.size
+
+		BoxLayout:
+			orientation: 'horizontal'
+			rows: 2
+
+			BoxLayout:
+				orientation: 'vertical'
+				GridLayout:
+					rows: 7
+					cols: 4
+					ItemLabel:
+						text: 'Капитал фонда'
+					ItemLabel:
+						text: 'Всего,руб'
+					ItemLabel:
+						text: 'Последний месяц,руб'
+					ItemLabel:
+						text: 'Весь период,руб'
+
+					ItemLabel:
+						bold: True
+						text: 'Общий капитал'
+					ItemLabel:
+						bold: True
+						text: '1120000'
+					ItemLabel:
+						bold: True
+						text: '+10000(1.9%)'
+						color: 109/255, 214/255, 113/255, 1
+					ItemLabel:
+						bold:True
+						text: '-20000(3.8%)'
+						color: 1, 0, 0, 1
+
+					ItemLabel:
+						text: 'В активах'
+					ItemLabel:
+						text: '800000'
+					ItemLabel:
+						bold: True
+						text: '+9000(1.75%)'
+						color: 109/255, 214/255, 113/255, 1
+					ItemLabel:
+						bold:True
+						text: '-24000(3.8%)'
+						color: 1, 0, 0, 1
+
+					ItemLabel:
+						text: 'В депозите'
+					ItemLabel:
+						text: '200000'
+					ItemLabel:
+						bold: True
+						text: '+1000(0.1%)'
+						color: 109/255, 214/255, 113/255, 1
+					ItemLabel:
+						bold:True
+						text: '+5000(0.5%)'
+						color: 109/255, 214/255, 113/255, 1
+
+					ItemLabel:
+						text: 'Свободных'
+					ItemLabel:
+						text: '120000'
+					ItemLabel:
+						text: ''
+					ItemLabel:
+						text: ''
+
+					ItemLabel:
+						text: ''
+					ItemLabel:
+						text: 'Всего, шт'
+					ItemLabel:
+						text: 'Последний месяц, шт'
+					ItemLabel:
+						text: 'Общий доход,руб'
+
+					ItemLabel:
+						bold: True
+						text: 'Паи фонда'
+					ItemLabel:
+						bold: True
+						text: '1000'
+					ItemLabel:
+						bold: True
+						text: '+100(1%)'
+						color: 109/255, 214/255, 113/255, 1
+					ItemLabel:
+						bold: True
+						text: '+100000'
+						color: 109/255, 214/255, 113/255, 1
+
+			#Buttons to end month
+			BoxLayout:
+				size_hint: (0.25, 1)
+
+				GridLayout:
+					rows: 2
+					cols: 1
+					BoxLayout:
+						padding: 30, 60, 30, 60
+						canvas:
+							Color:
+								rgb: 110/255, 127/255, 214/255, 1
+							Rectangle:
+								pos: self.pos 
+								size: self.size
+
+						Label:
+							font_size: '24'
+							text: 'Месяц 19/36'
+					BoxLayout:
+						
+						padding: 30, 60, 30, 60
+						Button:
+							background_color: 109/255, 214/255, 113/255, 1
+							font_size: '24'
+							text: 'Закончить ход'
+		BoxLayout:
+			size_hint: (1, 0.5)
+			GridLayout:
+				rows: 2
+				cols: 4
+				BoxLayout:
+					padding: 30, 60, 30, 60
+					Button:
+						background_color: 109/255, 214/255, 113/255, 1
+						font_size: '24'
+						text: 'Состав портфеля'
+				BoxLayout:
+					padding: 30, 60, 30, 60
+					Button:
+						background_color: 109/255, 214/255, 113/255, 1
+						font_size: '24'
+						text: 'Рыночные активы'
+				Label:
+					text: ''
+				Label:
+					text: ''
+
+				BoxLayout:
+					padding: 30, 60, 30, 60
+					Button:
+						background_color: 168/255, 64/255, 255/255, 1
+						font_size: '24'
+						text: 'Акции'
+				BoxLayout:
+					padding: 30, 60, 30, 60
+					Button:
+						background_color: 168/255, 64/255, 255/255, 1
+						font_size: '24'
+						text: 'Металлы'
+				BoxLayout:
+					padding: 30, 60, 30, 60
+					Button:
+						background_color: 168/255, 64/255, 255/255, 1
+						font_size: '24'
+						text: 'Облигации'
+				BoxLayout:
+					padding: 30, 60, 30, 60
+					Button:
+						background_color: 168/255, 64/255, 255/255, 1
+						font_size: '24'
+						text: 'Депозиты'
+		BoxLayout:
+			size_hint: (1, 0.8)
+			ItemLabel:
+				text: "List of stocks"
+		
