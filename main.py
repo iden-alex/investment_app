@@ -47,15 +47,37 @@ class Game_parametersApp(App):
 		return Experiment()
 
 class Experiment():
-	start_capital
+	start_capital = 100000
+	game_duration = 12
+	tax = 0.13
+	empty_invest_portfolio = True
+
+	def start():
+		pass 
+
+	def tick():
+		pass
 
 class InvestFound():
+	assets = []
+	capital = 0
 	pass
 
 class Market():
 	pass
 
 class MarketAsset():
+
+	pass
+
+class Stock(MarketAsset):
+	pass
+
+class Metall(MarketAsset):
+	pass
+
+#облигации
+class Bond(MarketAsset):
 	pass
 
 class Deposit():
