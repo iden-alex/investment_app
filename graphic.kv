@@ -1,19 +1,17 @@
-WindowManager:
-	FirstWindow: 
-	SecondWindow:
+#:kivy 2.0.0
 
 <ItemLabel@Label>:
 	font_size: '20'
 	color: 0, 0, 0, 1
 
-<FirstWindow>:
-	name: "first"
-	
-	GridLayout:
-		start_capital: input_capital
-		game_duration: input_duration
-		tax: input_tax
+ # -----------------------------------------------------------------
 
+<StartWindow>:
+	name: "start"
+	GridLayout:
+		#start_capital: input_capital
+		#game_duration: input_game_duration
+		#tax: input_tax
 		rows: 6
 
 		canvas.before:
@@ -24,10 +22,12 @@ WindowManager:
 				size: self.size
 
 		AnchorLayout:
-			size_hint: 1, 0.1
+			size_hint: 1, 0.09
+			padding: [0,30, 0, 0]
 			Label:
 				font_size: "25"
-				text:  "Введите параметры игры"
+				
+				text:  "Параметры игры"
 				color: 0, 0, 0, 1 
 	    GridLayout:
 	    	cols: 2
@@ -36,56 +36,70 @@ WindowManager:
 	    	spacing: 50
 
 			ItemLabel:
-		    	text: "Начальный капитал, руб"
-			TextInput:
-				multiline: False
+		    	text: "Начальный капитал, у.е."
+			NumericInput:
 				id: input_capital
-				input_type: 'number'
+				min_value: 1
+				max_value: 100000000
+				text: '100000'
 				input_filter: 'int'
+				hint_text: 'Enter values between {} and {}'.format(self.min_value, self.max_value)
 			
 			ItemLabel:
 		    	text: "Длительность работы фонда, мес"
-			TextInput:
-				multiline: False
-				id: input_duration
-				input_type: 'number'
-				input_filter: 'int'
-			
+			BoxLayout:
+				orientation: 'vertical'
+				MDLabel:
+					text: str(int(input_game_duration.value))
+					pos_hint: {"center_y": 0.6}
+					font_style: "H6"
+					halign: "center"
+				MDSlider:
+					id: input_game_duration
+					min: 1
+					max: 24
+					value: 12
+
 			ItemLabel:
 		    	text: "Процент налога на доход, %"
-			TextInput:
-				multiline: False
-				id: input_tax
-				input_type: 'number'
-				input_filter: 'int'
+			BoxLayout:
+				orientation: 'vertical'
+				MDLabel:
+					text: str(int(input_tax.value))
+					pos_hint: {"center_y": 0.6}
+					font_style: "H6"
+					halign: "center"
+				MDSlider:
+					id: input_tax
+					min: 0
+					max: 80
+					value: 13
 
 			ItemLabel:
-		    	text: "Степень изменчивость на рынке"
-			TextInput:
-				multiline: False
-				input_type: 'number'
-				input_filter: 'int'
-
-			ItemLabel:
-		    	text: "Начальная структура портфеля"
-			TextInput:
-				multiline: False
-				input_type: 'number'
-				input_filter: 'int'
-
+		    	text: "Волатильность рынка"
+			BoxLayout:
+				padding: [120, 0, 120, 0]
+				Spinner:
+					id: input_volatility
+					#size_hint: None, None
+					size: 100, 44
+					#pos_hint: {'center': (.5, .5)}
+					text: 'Низкая'
+					values: 'Низкая', 'Средняя', 'Высокая'
 		BoxLayout:
 			size_hint: (0.9, 0.15)
 			color: 0, 1, 0, 1
-			padding: [240, 0, 240, 30]
+			padding: [240, 0, 240, 20]
 			Button:
 				text: 'НАЧАТЬ ИГРУ'
 				on_press:
-					app.root.current = "second"
 					root.manager.transition.direction = "left"
-					root.tmp()
+					root.start_model()
 
-<SecondWindow>:
-	name: "second"
+# -----------------------------------------------------------------
+
+<MainWindow>:
+	name: "main"
 	GridLayout:
 		rows: 3
 		#cols: 1
@@ -263,6 +277,6 @@ WindowManager:
 						text: 'Депозиты'
 		BoxLayout:
 			size_hint: (1, 0.8)
-			ItemLabel:
-				text: "List of stocks"
+			BoxLayout:
+				id: table
 		
