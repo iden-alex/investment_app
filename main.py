@@ -1,6 +1,9 @@
 from classes.model_class import Model
 from GUI.main_window import MainWindow
 from GUI.start_window import StartWindow
+from GUI.asset_window import AssetWindow
+from GUI.deposit_window import DepositWindow
+from GUI.history_window import HistoryWindow
 
 from kivy.lang import Builder
 from kivymd.app import MDApp
@@ -30,10 +33,14 @@ class InvestmentFundApp(MDApp):
 		sm = ScreenManager()
 		sm.screen1 = StartWindow(name='start')
 		sm.screen2 = MainWindow(name='main')
-		sm.screen3 = Screen(name='buy_sell')
+		sm.screen3 = AssetWindow(name='buy_sell_asset')
+		sm.screen4 = DepositWindow(name='change_deposit')
+		sm.screen5 = HistoryWindow(name='history')
 		sm.add_widget(sm.screen1)
 		sm.add_widget(sm.screen2)
 		sm.add_widget(sm.screen3)
+		sm.add_widget(sm.screen4)
+		sm.add_widget(sm.screen5)
 		return sm
 
 if __name__ ==  "__main__":

@@ -9,11 +9,7 @@
 <StartWindow>:
 	name: "start"
 	GridLayout:
-		#start_capital: input_capital
-		#game_duration: input_game_duration
-		#tax: input_tax
 		rows: 6
-
 		canvas.before:
 			Color:
 				rgba: (0.95, 0.95, 0.95, 0.95)
@@ -37,14 +33,17 @@
 
 			ItemLabel:
 		    	text: "Начальный капитал, у.е."
-			NumericInput:
-				id: input_capital
-				min_value: 1
-				max_value: 100000000
-				text: '100000'
-				input_filter: 'int'
-				hint_text: 'Enter values between {} and {}'.format(self.min_value, self.max_value)
-			
+			BoxLayout:
+				padding: 20, 5, 20, 5
+				NumericInput:
+					id: input_capital
+					min_value: 1
+					max_value: 100000000
+					halign: 'center'
+					text: '100000'
+					input_filter: 'int'
+					hint_text: 'Enter values between {} and {}'.format(self.min_value, self.max_value)
+				
 			ItemLabel:
 		    	text: "Длительность работы фонда, мес"
 			BoxLayout:
@@ -56,6 +55,7 @@
 					halign: "center"
 				MDSlider:
 					id: input_game_duration
+					#min: 12
 					min: 12
 					max: 30
 					value: 15
@@ -100,8 +100,9 @@
 
 <MainWindow>:
 	name: "main"
-	GridLayout:
-		rows: 3
+	BoxLayout:
+		orientation: 'vertical'
+		rows: 2
 
 		canvas.before:
 			Color:
@@ -109,8 +110,8 @@
 			Rectangle:
 				pos: self.pos
 				size: self.size
-
 		BoxLayout:
+			padding: (0, 40, 0, 40)
 			orientation: 'horizontal'
 			rows: 2
 
@@ -130,35 +131,32 @@
 						bold: True
 						text: 'Общий капитал'
 					ItemLabel:
+						id: cur_capital
 						bold: True
-						text: '1120000'
 					ItemLabel:
-						bold:True
-						text: '-20000(3.8%)'
-						color: 1, 0, 0, 1
+						bold: True
+						id: delta_capital
 
 					ItemLabel:
 						text: 'В активах'
 					ItemLabel:
-						text: '800000'
+						id: in_assets
 					ItemLabel:
 						bold:True
-						text: '-24000(3.8%)'
-						color: 1, 0, 0, 1
+						id: delta_assets
 
 					ItemLabel:
 						text: 'В депозите'
 					ItemLabel:
-						text: '200000'
+						id: in_deposits
 					ItemLabel:
 						bold:True
-						text: '+5000(0.5%)'
-						color: 109/255, 214/255, 113/255, 1
+						id: delta_deposits
 
 					ItemLabel:
 						text: 'Свободных'
 					ItemLabel:
-						text: '120000'
+						id: free_capital
 					ItemLabel:
 						text: ''
 
@@ -174,21 +172,20 @@
 						text: 'Паи фонда'
 					ItemLabel:
 						bold: True
-						text: '1000'
+						id: full_fund_items
 					ItemLabel:
 						bold: True
-						text: '+100000'
-						color: 109/255, 214/255, 113/255, 1
+						id: fund_items_income
 
 			#Buttons to end month
 			BoxLayout:
+				padding: 30
 				size_hint: (0.25, 1)
 
 				GridLayout:
-					rows: 3
+					rows: 4
 					cols: 1
 					AnchorLayout:
-						padding: 60, 60, 60, 60
 						canvas:
 							Color:
 								rgb: 110/255, 127/255, 214/255, 1
@@ -197,53 +194,288 @@
 								size: self.size
 
 						Label:
+							id: month
 							font_size: '24'
 							text: 'Месяц 1/36'
 					BoxLayout:
-						padding: 30, 30, 30, 30
+						#padding: 30, 30, 30, 30
+						Button:
+							background_color: 204/255, 153/255, 255/255, 1
+							font_size: '24'
+							text: 'История фонда'
+							on_press: 
+								root.show_history()
+					BoxLayout:
+						#padding: 30, 30, 30, 30
 						Button:
 							background_color: 109/255, 214/255, 113/255, 1
 							font_size: '24'
 							text: 'Закончить ход'
+							on_press:
+								root.end_turn()
 					BoxLayout:
-						padding: 30, 30, 30, 30
+						#padding: 30, 30, 30, 30
 						Button:
 							background_color: 219/255, 100/255, 113/255, 1
 							font_size: '24'
 							text: 'Начать заново'
 							on_press: 
 								root.restart_game()
-
-							
-
-		BoxLayout:
-			size_hint: (1, 0.1)
-			GridLayout:
-				rows: 1
-				cols: 3
-				BoxLayout:
-					Button:
-						text: "Показать"
-				BoxLayout:
-					padding: [120, 0, 120, 0]
-					Spinner:
-						id: input_volatility
-						#size_hint: None, None
-						size: 100, 44
-						#pos_hint: {'center': (.5, .5)}
-						text: 'Рынок'
-						values: 'Рынок', 'Мой портфель'
-				BoxLayout:
-					padding: [120, 0, 120, 0]
-					Spinner:
-						id: input_volatility
-						#size_hint: None, None
-						size: 100, 44
-						#pos_hint: {'center': (.5, .5)}
-						text: 'Активы'
-						values: 'Активы', 'Депозиты'
-		BoxLayout:
-			size_hint: (1, 1)
+		FloatLayout:
 			BoxLayout:
-				id: table
-		
+				size_hint: 0.5, 0.1
+				pos:(10, root.height / 2 - 50)
+				orientation:'vertical'
+				Label:
+					text: "Список рыночных активов"
+					font_size: 15
+					color: 0, 0, 0, 1
+			BoxLayout:
+				size_hint: 0.5, 0.9
+				orientation:'vertical'
+				pos:(10, 10)
+				id: table1
+
+			BoxLayout:
+				size_hint: 0.5, 0.1
+				pos:(10 + root.width/2, root.height/2 - 50)
+				orientation:
+				Label:
+					text: "Срочные депозиты"
+					font_size: 15
+					color: 0, 0, 0, 1
+			BoxLayout:
+				size_hint: 0.45, 0.9
+				orientation:'vertical'
+				pos:(30 + root.width/2, 10)
+				id: table2
+
+# -----------------------------------------------------------------
+
+<AssetWindow>:
+	name: "buy_sell_asset"
+	FloatLayout:
+		BoxLayout:
+			size_hint: 0.5, 0.1
+			pos:(10, root.height * 0.8)
+			orientation:'vertical'
+			Label:
+				text: "Покупка/продажа активов"
+				font_size: 25
+				bold: True
+				color: 0, 0, 0, 1
+		GridLayout:
+			size_hint: 0.75, 0.5
+			pos:(root.width * 0.1, root.height * 0.3)
+			cols: 2
+	    	rows: 7
+	    	#padding: 50
+	    	#spacing: 50
+
+			ItemLabel:
+		    	text: "Название:"
+			ItemLabel:
+				id: asset_name
+			
+			ItemLabel:
+		    	text: "Тип:"
+			ItemLabel:
+				id: asset_type
+
+			ItemLabel:
+		    	text: "Цена:"
+			ItemLabel:
+				id: asset_price
+
+			ItemLabel:
+		    	text: "В фонде, шт:"
+			ItemLabel:
+				id: assets_in_fund
+
+			ItemLabel:
+		    	text: "Свободных денег в фонде:"
+			ItemLabel:
+				id: free_sum
+
+			ItemLabel:
+		    	text: "Купить, шт"
+			BoxLayout:
+				orientation: 'vertical'
+				padding: 100, 15, 100, 15
+				NumericInput:
+					id: buy_asset
+					min_value: 0
+					max_value: 0
+					halign: 'center'
+					input_filter: 'int'
+					hint_text: 'Enter values between {} and {}'.format(self.min_value, self.max_value)
+				
+			ItemLabel:
+		    	text: "Продать, шт"
+			BoxLayout:
+				orientation: 'vertical'
+				padding: 100, 15, 100, 15
+				NumericInput:
+					id: sell_asset
+					min_value: 0
+					max_value: 0
+					halign: 'center'
+					input_filter: 'int'
+					hint_text: 'Enter values between {} and {}'.format(self.min_value, self.max_value)
+
+		BoxLayout:
+			size_hint: 0.75, 0.05
+			pos:(root.width * 0.125, root.height * 0.15)
+			orientation:'vertical'
+			BoxLayout:
+				orientation: 'vertical'
+				padding: root.width*0.25, 0, root.width*0.25, 0
+				Button:
+					#size_hint: 0.4, 0.03
+					text: "Подтвердить и вернуться"
+					font_size: 20
+					background_color: 109/255, 214/255, 113/255, 1
+					bold: True
+					on_press: root.asset_restructuring()
+		BoxLayout:
+			size_hint: 0.25, 0.05
+			pos:(root.width * 0.75, root.height * 0.825)
+			orientation:'vertical'
+			BoxLayout:
+				orientation: 'vertical'
+				padding: 50, 0, 50, 0
+				Button:
+					text: "Вернуться"
+					font_size: 20
+					background_color: 219/255, 100/255, 113/255, 1
+					#bold: True
+					on_press: root.return_to_main()
+# -----------------------------------------------------------------
+
+
+<DepositWindow>:
+	name: "buy_sell_asset"
+	FloatLayout:
+		BoxLayout:
+			size_hint: 0.5, 0.1
+			pos:(10, root.height * 0.8)
+			orientation:'vertical'
+			Label:
+				text: "Вклад в депозит"
+				font_size: 25
+				bold: True
+				color: 0, 0, 0, 1
+		GridLayout:
+			size_hint: 0.75, 0.5
+			pos:(root.width * 0.1, root.height * 0.3)
+			cols: 2
+	    	rows: 6
+	    	#padding: 50
+	    	#spacing: 50
+
+			ItemLabel:
+		    	text: "Название:"
+			ItemLabel:
+				id: deposit_name
+			
+			ItemLabel:
+		    	text: "Срок, месы:"
+			ItemLabel:
+				id: deposit_time
+
+			ItemLabel:
+		    	text: "Процент:"
+			ItemLabel:
+				id: deposit_perc
+
+			ItemLabel:
+		    	text: "Свободных денег в фонде:"
+			ItemLabel:
+				id: free_sum
+
+			ItemLabel:
+		    	text: "Условия:"
+			BoxLayout:
+				padding: 50, 0, 50, 0
+				ItemLabel:
+					text_size: self.width, None
+					halign: 'center'
+					text: "Деньги начисляются только после окончания срока"
+
+			ItemLabel:
+		    	text: "Вложить, у.е."
+			BoxLayout:
+				orientation: 'vertical'
+				padding: 100, 20, 100, 20
+				NumericInput:
+					id: invest
+					min_value: 0
+					max_value: 0
+					halign: 'center'
+					input_filter: 'int'
+					hint_text: 'Enter values between {} and {}'.format(self.min_value, self.max_value)
+				
+
+		BoxLayout:
+			size_hint: 0.75, 0.05
+			pos:(root.width * 0.125, root.height * 0.15)
+			orientation:'vertical'
+			BoxLayout:
+				orientation: 'vertical'
+				padding: root.width*0.25, 0, root.width*0.25, 0
+				Button:
+					#size_hint: 0.4, 0.03
+					text: "Подтвердить и вернуться"
+					font_size: 20
+					background_color: 109/255, 214/255, 113/255, 1
+					bold: True
+					on_press: root.deposit_invest()
+		BoxLayout:
+			size_hint: 0.25, 0.05
+			pos:(root.width * 0.75, root.height * 0.825)
+			orientation:'vertical'
+			BoxLayout:
+				orientation: 'vertical'
+				padding: 50, 0, 50, 0
+				Button:
+					text: "Вернуться"
+					font_size: 20
+					background_color: 219/255, 100/255, 113/255, 1
+					#bold: True
+					on_press: root.return_to_main()
+
+
+
+# -----------------------------------------------------------------
+
+
+<HistoryWindow>:
+	name: "history"
+	FloatLayout:
+		BoxLayout:
+			size_hint: 0.5, 0.1
+			pos:(10, root.height * 0.8)
+			orientation:'vertical'
+			Label:
+				text: "История операций фонда"
+				font_size: 25
+				bold: True
+				color: 0, 0, 0, 1
+		BoxLayout:
+			size_hint: 0.75, 0.5
+			pos:(root.width * 0.1, root.height * 0.3)
+			MDList:
+				id: acts_list
+		BoxLayout:
+			size_hint: 0.25, 0.05
+			pos:(root.width * 0.75, root.height * 0.825)
+			orientation:'vertical'
+			BoxLayout:
+				orientation: 'vertical'
+				padding: 50, 0, 50, 0
+				Button:
+					text: "Вернуться"
+					font_size: 20
+					background_color: 219/255, 100/255, 113/255, 1
+					#bold: True
+					on_press: root.return_to_main()

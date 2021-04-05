@@ -5,11 +5,11 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.window import Window
 
-RED_COLOR = (1, 0, 0, 1)
+RED_COLOUR = (1, 0, 0, 1)
 
 class NumericInput(TextInput):
 	'''
-	Класс виджета ввода капитала с фильтрацией ввода
+	Класс виджета ввода числовых параметров с фильтрацией ввода(ограничение сверху/снизу)
 	'''
 
 	min_value = NumericProperty()
@@ -41,7 +41,7 @@ class StartWindow(Screen):
 		'''
 		capital_text = self.ids.input_capital.text
 		if not capital_text.isnumeric():
-			self.ids.input_capital.hint_text_color = RED_COLOR
+			self.ids.input_capital.hint_text_color = RED_COLOUR
 			return
 		start_capital = int(capital_text)
 		game_duration = int(self.ids.input_game_duration.value)
