@@ -42,7 +42,7 @@
 					halign: 'center'
 					text: '100000'
 					input_filter: 'int'
-					hint_text: 'Enter values between {} and {}'.format(self.min_value, self.max_value)
+					hint_text: 'Введите число от {} до {}'.format(self.min_value, self.max_value)
 				
 			ItemLabel:
 		    	text: "Длительность работы фонда, мес"
@@ -56,7 +56,7 @@
 				MDSlider:
 					id: input_game_duration
 					#min: 12
-					min: 12
+					min: 4
 					max: 30
 					value: 15
 
@@ -78,14 +78,12 @@
 			ItemLabel:
 		    	text: "Волатильность рынка"
 			BoxLayout:
-				padding: [120, 0, 120, 0]
+				padding: [80, 0, 80, 0]
 				Spinner:
 					id: input_volatility
-					#size_hint: None, None
 					size: 100, 44
-					#pos_hint: {'center': (.5, .5)}
-					text: 'Low'
-					values: 'Low', 'Medium', 'High'
+					text: 'Низкая'
+					values: 'Низкая', 'Средняя', 'Высокая'
 		BoxLayout:
 			size_hint: (0.9, 0.15)
 			color: 0, 1, 0, 1
@@ -200,19 +198,20 @@
 					BoxLayout:
 						#padding: 30, 30, 30, 30
 						Button:
-							background_color: 204/255, 153/255, 255/255, 1
-							font_size: '24'
-							text: 'История фонда'
-							on_press: 
-								root.show_history()
-					BoxLayout:
-						#padding: 30, 30, 30, 30
-						Button:
+							id: end_game
 							background_color: 109/255, 214/255, 113/255, 1
 							font_size: '24'
 							text: 'Закончить ход'
 							on_press:
 								root.end_turn()
+					BoxLayout:
+						#padding: 30, 30, 30, 30
+						Button:
+							background_color: 204/255, 153/255, 255/255, 1
+							font_size: '24'
+							text: 'История фонда'
+							on_press: 
+								root.show_history()
 					BoxLayout:
 						#padding: 30, 30, 30, 30
 						Button:
@@ -308,7 +307,7 @@
 					max_value: 0
 					halign: 'center'
 					input_filter: 'int'
-					hint_text: 'Enter values between {} and {}'.format(self.min_value, self.max_value)
+					hint_text: 'Введите число от {} до {}'.format(self.min_value, self.max_value)
 				
 			ItemLabel:
 		    	text: "Продать, шт"
@@ -321,7 +320,7 @@
 					max_value: 0
 					halign: 'center'
 					input_filter: 'int'
-					hint_text: 'Enter values between {} and {}'.format(self.min_value, self.max_value)
+					hint_text: 'Введите число от {} до {}'.format(self.min_value, self.max_value)
 
 		BoxLayout:
 			size_hint: 0.75, 0.05
@@ -413,7 +412,7 @@
 					max_value: 0
 					halign: 'center'
 					input_filter: 'int'
-					hint_text: 'Enter values between {} and {}'.format(self.min_value, self.max_value)
+					hint_text: 'Введите число от {} до {}'.format(self.min_value, self.max_value)
 				
 
 		BoxLayout:
@@ -463,9 +462,10 @@
 				color: 0, 0, 0, 1
 		BoxLayout:
 			size_hint: 0.75, 0.5
-			pos:(root.width * 0.1, root.height * 0.3)
-			MDList:
-				id: acts_list
+			pos:(root.width * 0.1, root.height * 0.25)
+			ScrollView:
+				MDList:
+					id: acts_list
 		BoxLayout:
 			size_hint: 0.25, 0.05
 			pos:(root.width * 0.75, root.height * 0.825)
@@ -477,5 +477,4 @@
 					text: "Вернуться"
 					font_size: 20
 					background_color: 219/255, 100/255, 113/255, 1
-					#bold: True
 					on_press: root.return_to_main()

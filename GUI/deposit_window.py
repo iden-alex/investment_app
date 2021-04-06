@@ -5,6 +5,10 @@ from kivy.core.window import Window
 from kivy.metrics import dp
 
 class DepositWindow(Screen):
+    '''
+    Окно покупки/продажи депозитов.
+    Открывается при нажатии на название депозита в таблице депозитов.
+    '''
 
     def init_model(self, model):
         self.model = model
@@ -24,9 +28,15 @@ class DepositWindow(Screen):
         self.ids.invest.max_value = available_to_invest
 
     def return_to_main(self):
+        '''
+        Функция, вызываемая при нажатии кнопки "Вернуться"
+        '''
         self.manager.current = 'main'
 
     def deposit_invest(self):
+        '''
+        Функция, вызываемая при нажатии кнопки "Подтвердить и вернуться"(инвестирование в депозит)
+        '''
         deposit_str = self.ids.invest.text.strip()
         if deposit_str:
             deposit_sum = int(deposit_str)

@@ -3,7 +3,7 @@ from random import random
 import numpy as np
 
 START_NUM_FUND_ITEMS = 100
-FUND_ITEMS_VOLATILITY = 0.1
+FUND_ITEMS_VOLATILITY = 1
 
 class InvestFund():
     '''
@@ -43,6 +43,9 @@ class InvestFund():
         self.total_capital = self.free_capital + self.capital_in_deposits + self.capital_in_assets
 
     def buy_asset(self, name, num):
+        '''
+        Покупка активва 
+        '''
         cost = self.market.buy_to_fund(name, num)
         assert 0 <= cost <= self.free_capital 
         self.free_capital -= cost
@@ -50,6 +53,9 @@ class InvestFund():
         self.update_fund_state()
 
     def sell_asset(self, name, num):
+        '''
+        Продажа актива
+        '''
         income = self.market.sell_from_fund(name, num)
         profit = int(income * (1 - self.income_tax / 100))
         self.free_capital += profit
@@ -57,6 +63,9 @@ class InvestFund():
         self.update_fund_state()
 
     def fund_items_update(self, old_capital):
+        '''
+        Моделирование покупки/продажи рынком паев фонда
+        '''
         delta = self.total_capital - old_capital
         if delta > 0:
             fund_efficency = min(delta / old_capital, 1)
@@ -78,14 +87,14 @@ class InvestFund():
         if delta_items < 0:
             act = f'Отток паев: {delta_items} шт, -{delta_money} у.е.'
             self.actions_list.append(act)
-        
-
-
 
     def invest_deposit(self, name, sum):
+        '''
+        Инвестирование в депозит
+        '''
         assert self.free_capital >= sum
         self.free_capital -= sum
-        # change attr of money in deposits
+        self.deposit_profit -= sum
         # создание депозита-вложения
         self.market.create_investing_deposit(name, sum)
     
@@ -98,7 +107,7 @@ class InvestFund():
 
     def get_bond_income(self, income):
         '''
-        Вызывается при окончании срока депозита
+        Вызывается при получении выплаты от облигаций
         '''
         self.free_capital += income
         self.assets_profit += income

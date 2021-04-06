@@ -51,7 +51,7 @@ class Model():
 			self.fund.get_depo_income(income_deposit)
 		
 		income_bonds = self.market.tick_bonds()
-		if income_bonds:
+		if income_deposit:
 			self.fund.get_bond_income(income_bonds)
 
 		self.fund.update_fund_state()

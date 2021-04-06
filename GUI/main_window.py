@@ -11,7 +11,7 @@ GRAY_COLOUR = (128/255, 128/255, 125/ 255)
 
 class MainWindow(Screen):
 	'''
-	Класс основного окна с выводом информации о фонде, таблицей активов и крактим меню
+	Класс основного окна с выводом информации о фонде, таблицей активов и кратким меню
 	'''
 
 	def init_model(self, model):
@@ -19,6 +19,9 @@ class MainWindow(Screen):
 		self.update_screen()
 
 	def show_delta(self, id, capital_delta):
+		'''
+		Форматирование и вывод строк, показывающих изменение капитала
+		'''
 		capital_delta_perc = round(100 * capital_delta/self.model.start_capital,2)
 		if capital_delta > 0:
 			id.color = GREEN_COLOUR
@@ -31,6 +34,9 @@ class MainWindow(Screen):
 			id.text = f"{capital_delta}({-capital_delta_perc})"
 
 	def update_screen(self, update_assets=True, update_deposits=True):
+		'''
+		Обновление всех атрибутов на экране
+		'''
 		self.ids.month.text = f'Месяц {self.model.month_counter}/{self.model.game_duration}'
 
 		# капитал
@@ -50,7 +56,8 @@ class MainWindow(Screen):
 
 		# депозиты
 		self.ids.in_deposits.text = str(self.model.fund.capital_in_deposits)
-		deposits_delta = self.model.fund.deposit_profit 
+		deposits_delta = self.model.fund.deposit_profit + \
+			self.model.fund.capital_in_deposits
 		self.show_delta(self.ids.delta_deposits, deposits_delta)
 
 		# паи
@@ -64,6 +71,9 @@ class MainWindow(Screen):
 			
 		
 	def table_asset_on_row_press(self, instance_table, instance_row):
+		'''
+		Функция, активируемая при нажатии на название актива в таблице активов
+		'''
 		asset_name = instance_row.text
 		if asset_name in self.model.market.assets:
 			asset = self.model.market.assets[asset_name]
@@ -73,6 +83,9 @@ class MainWindow(Screen):
 			pass
 		
 	def table_deposit_on_row_press(self, instance_table, instance_row):
+		'''
+		Функция, активируемая при нажатии на название депозита в таблице депозитов
+		'''
 		deposit_name = instance_row.text
 		if deposit_name in self.model.market.deposits:
 			deposit = self.model.market.deposits[deposit_name]
@@ -82,11 +95,15 @@ class MainWindow(Screen):
 			pass
 	
 	def set_table_assets(self):
+		'''
+		Удаление имеющейся таблицы активов(если есть) и установка новой(с новыми данными)
+		Note: kivymd MDDataTable не имеет API изменения данных таблицы, поэтому приходится добавлять/удалять виджеты
+		Из-за этого возникает задержка в пару сек между ходами, разработчики пишут, что проблемы есть и в будущем оптимизируют это
+		'''
 		self.ids.table1.clear_widgets()
 		data_assets = [(name, x.type, x.price, x.num_in_fund, round(100*x.percent, 1)) 
 										for name, x in self.model.market.assets.items()]
 		self.table_asset = MDDataTable(pos_hint={'center_x': 0.5, 'center_y': 0.5},
-							#size_hint=(0.9, 0.6),
 							rows_num=len(data_assets),
 							column_data=[
                                     ("Название", dp(20)),
@@ -104,6 +121,9 @@ class MainWindow(Screen):
 		self.ids.table1.add_widget(self.table_asset)
 
 	def set_table_deposits(self):
+		'''
+		Аналогично set_table_assets
+		'''
 		self.ids.table2.clear_widgets()
 		invested_deposits = [(x.name, x.time, x.perc, x.sum, x.time_left) 
 										for x in self.model.market.fund_deposits]
@@ -141,30 +161,24 @@ class MainWindow(Screen):
 
 	def end_turn(self):
 		'''
-		1) Проверить - последний месяц или нет
-			- если последний месяц, то вывести сообщение  об этом, 
-				заблокировать кнопки завершения хода и покупку продажу 
-			- если нет, то инремитировать счетчик, обновить месяц на GUI		
-		2) Обновить паи:
-			- сгенерировать случайное изменение количества паев
-			- изменить число паев и свободное кол-во денег, вывести на GUI
-		3) Обновить цены активов, обновить сумму денег по активам фонда, обновить таблицу GUI
-		4) Обновить условия депозитов, если последний месяц, то обновить кол-во денег фонда в депозите
-		  обновить таблицу GUI
-
+		Функция, вызываемая при нажатии "Закончить ход"
 		'''
-		self.flag_end_game = self.model.tick()
-		self.ids.month.text = f'Месяц {self.model.month_counter}/{self.model.game_duration}'
-		if self.model.month_counter >= self.model.game_duration:
-			return
-		
-		#self.set_tables()
+				
+		self.flag_end_game = self.model.tick()	
 		self.update_screen()
 		self.set_table_assets()
 		self.set_table_deposits()
+		self.ids.month.text = f'Месяц {self.model.month_counter}/{self.model.game_duration}'
+		if self.model.month_counter >= self.model.game_duration:
+			self.ids.end_game.text = 'Игра закончена'
+			self.ids.end_game.on_press = self.empty_func_end
+			return
 
 
 	def show_history(self):
+		'''
+		Функция, вызываемая при нажатии "история фонда"
+		'''
 		self.manager.screen5.update_list(self.model.actions_list)
 		self.manager.current = 'history'
 		
@@ -173,4 +187,11 @@ class MainWindow(Screen):
 		'''
 		Функция-заглушка
 		'''
+		pass
+
+	def empty_func_end(self):
+		'''
+		Функция-заглушка
+		'''
+		print('заглушка')
 		pass

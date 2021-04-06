@@ -1,8 +1,12 @@
 certifi==2020.12.5
-docutils @ file:///home/conda/feedstock_root/build_artifacts/docutils_1610127754852/work
-Kivy @ file:///home/conda/feedstock_root/build_artifacts/kivy_1608575256429/work
-numpy @ file:///home/conda/feedstock_root/build_artifacts/numpy_1612952999509/work
-olefile @ file:///home/conda/feedstock_root/build_artifacts/olefile_1602866521163/work
-Pillow @ file:///home/conda/feedstock_root/build_artifacts/pillow_1614689686152/work
-Pygments @ file:///home/conda/feedstock_root/build_artifacts/pygments_1613412098605/work
-scipy @ file:///home/conda/feedstock_root/build_artifacts/scipy_1609457854765/work
+chardet==4.0.0
+docutils==0.17
+idna==2.10
+Kivy==2.0.0
+Kivy-Garden==0.1.4
+kivymd==0.104.2.dev0
+numpy==1.20.2
+Pillow==8.2.0
+Pygments==2.8.1
+requests==2.25.1
+urllib3==1.26.4

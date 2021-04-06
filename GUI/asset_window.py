@@ -27,9 +27,15 @@ class AssetWindow(Screen):
         self.ids.sell_asset.max_value = asset.num_in_fund
 
     def return_to_main(self):
+        '''
+        Функция, вызываемая при нажатии кнопки "Вернуться"
+        '''
         self.manager.current = 'main'
 
     def asset_restructuring(self):
+        '''
+        Функция, вызываемая при нажатии кнопки "Подтвердить и вернуться"(покупка актива)
+        '''
         purchase_str = self.ids.buy_asset.text.strip()
         sale_str = self.ids.sell_asset.text.strip()
         if purchase_str:

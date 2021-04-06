@@ -47,9 +47,8 @@ class StartWindow(Screen):
 		game_duration = int(self.ids.input_game_duration.value)
 		tax = int(self.ids.input_tax.value)
 		volatility = self.ids.input_volatility.text
-
-		global cur_model
 		cur_model = Model(start_capital, game_duration, tax, volatility, self.manager)
+		cur_model.start()
 		self.manager.current = "main"
 		Window.size = (1280, 960)
-		cur_model.start()
+		
