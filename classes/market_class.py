@@ -1,5 +1,7 @@
 from random import random, choice
+from collections import deque
 import numpy as np
+
 
 #percent of start_capital, is needed to init start price for stocks
 MAX_INIT_PRICE = 50000
@@ -52,11 +54,12 @@ class Market():
     Класс, описывающий биржевой рынок
     '''
 
-    def __init__(self, volatility, start_capital, acts_list):
+    def __init__(self, volatility, start_capital, acts_list, tax):
         self.market_volatility = volatility
         self.direction = choice([-1, 1])
         self.actions_list = acts_list
-        self.direction_period = choice([3, 4, 5])
+        self.tax_perc = tax
+        self.direction_period = choice([2, 3, 4, 5])
         # инициализация активов
         self.assets = {name: MarketAsset(name, 'Акция', self.market_volatility, start_capital) for name in STOCKS_LIST}
         self.assets.update(
@@ -69,6 +72,7 @@ class Market():
         self.deposits = {name: Deposit(name, time, perc) for name, perc, time in DEPOSITS_LIST}
         self.fund_deposits = []
         self.invested_deposit_count = 0
+        self.assets_history = {asset:deque() for asset in STOCKS_LIST + BONDS_LIST + METALLS_LIST}
 
     def update_assets(self):
         '''
@@ -85,6 +89,7 @@ class Market():
         cost = asset.buy(num)
         act = f'Покупка {asset.name}: кол-во - {num} шт., цена: {asset.price}, потрачено: {cost}'
         self.actions_list.append(act)
+        self.assets_history[name].appendleft((asset.price, num))
         return cost
 
     def sell_from_fund(self, name, num):
@@ -93,7 +98,24 @@ class Market():
         '''
         asset = self.assets[name]
         pay = asset.sell(num)
-        act = f'Продажа {asset.name}: кол-во - {num} шт., цена: {asset.price}, получено: {pay}'
+        i = num
+        # учет налога на доход
+        while i > 0:
+            #print(self.assets_history)
+            purch_price, purch_num = self.assets_history[name].pop()
+            if purch_num > i:
+                tax = i*(asset.price - purch_price) * self.tax_perc / 100
+                i = 0 
+                purch_num -= i
+                self.assets_history[name].append((purch_price, purch_num))
+                if tax > 0:
+                    pay -= int(tax)
+            else:
+                tax = purch_num*(asset.price - purch_price) * self.tax_perc / 100
+                i -= purch_num
+                if tax > 0:
+                    pay -= int(tax)
+        act = f'Продажа {asset.name}: кол-во - {num} шт., цена: {asset.price}, получено после вычета налога: {pay}'
         self.actions_list.append(act)
         return pay
 

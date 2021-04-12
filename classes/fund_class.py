@@ -3,7 +3,7 @@ from random import random
 import numpy as np
 
 START_NUM_FUND_ITEMS = 100
-FUND_ITEMS_VOLATILITY = 1
+FUND_ITEMS_VOLATILITY = 2
 
 class InvestFund():
     '''
@@ -57,9 +57,8 @@ class InvestFund():
         Продажа актива
         '''
         income = self.market.sell_from_fund(name, num)
-        profit = int(income * (1 - self.income_tax / 100))
-        self.free_capital += profit
-        self.assets_profit += profit
+        self.free_capital += income
+        self.assets_profit += income
         self.update_fund_state()
 
     def fund_items_update(self, old_capital):

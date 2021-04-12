@@ -26,7 +26,7 @@ class Model():
 		'''
 		Старт моделирования
 		'''
-		self.market = Market(self.volatility, self.start_capital, self.actions_list)
+		self.market = Market(self.volatility, self.start_capital, self.actions_list, self.tax)
 		self.fund = InvestFund(self.market, self.start_capital, self.tax, self.actions_list)
 		self.screen_manager.screen2.init_model(self)
 		self.screen_manager.screen3.init_model(self)
