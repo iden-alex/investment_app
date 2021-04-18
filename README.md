@@ -9,7 +9,7 @@ cd investement_app
 pip install -requirements.txt
 ```
 
-If you have issuese with installing kivymd, the library can be installed in another way:
+If you have issues with installing kivymd, the library can be installed in another way:
 
 ```
 git clone https://github.com/kivymd/KivyMD.git --depth 1
