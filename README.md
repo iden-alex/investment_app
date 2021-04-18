@@ -1,7 +1,7 @@
 # investment_app
 App to manage investment fund on a simple simulated stock market. Project of practicum course MSU 2021
 
-## Start
+## Build
 
 ```
 git clone https://github.com/iden-alex/investment_app.git
@@ -9,6 +9,13 @@ cd investement_app
 pip install -requirements.txt
 ```
 
+If you have issuese with installing kivymd, the library can be installed in another way:
+
+```
+git clone https://github.com/kivymd/KivyMD.git --depth 1
+cd KivyMD
+pip install .
+```
 ## Launch
 
 ```
