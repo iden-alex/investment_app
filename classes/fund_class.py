@@ -1,6 +1,5 @@
 from random import choice
 from random import random
-import numpy as np
 
 START_NUM_FUND_ITEMS = 100
 FUND_ITEMS_VOLATILITY = 2
@@ -34,7 +33,7 @@ class InvestFund:
         """
         # активы
         self.capital_in_assets = round(
-            np.sum(
+            sum(
                 [
                     asset.price * asset.num_in_fund
                     for _, asset in self.market.assets.items()
@@ -43,7 +42,7 @@ class InvestFund:
         )
         # депозиты
         self.capital_in_deposits = round(
-            np.sum([deposit.sum for deposit in self.market.fund_deposits])
+            sum([deposit.sum for deposit in self.market.fund_deposits])
         )
         self.total_capital = (
             self.free_capital + self.capital_in_deposits + self.capital_in_assets

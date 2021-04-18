@@ -1,6 +1,5 @@
 from random import random, choice
 from collections import deque
-import numpy as np
 
 
 # percent of start_capital, is needed to init start price for stocks
@@ -161,7 +160,7 @@ class Market:
         Передача фонду выплат по всем облигациям фонда при окончании месяца:
         """
         income = round(
-            np.sum(
+            sum(
                 [
                     asset.price * asset.num_in_fund * asset.percent / 100
                     for _, asset in self.assets.items()
