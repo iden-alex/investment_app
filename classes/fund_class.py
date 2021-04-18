@@ -106,14 +106,14 @@ class InvestFund:
         # создание депозита-вложения
         self.market.create_investing_deposit(name, sum)
 
-    def get_depo_income(self, income):
+    def set_depo_income(self, income):
         """
         Вызывается при окончании срока депозита
         """
         self.free_capital += income
         self.deposit_profit += income
 
-    def get_bond_income(self, income):
+    def set_bond_income(self, income):
         """
         Вызывается при получении выплаты от облигаций
         """

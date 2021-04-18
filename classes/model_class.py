@@ -28,9 +28,10 @@ class Model:
         self.fund = InvestFund(
             self.market, self.start_capital, self.tax, self.actions_list
         )
-        self.screen_manager.screen2.init_model(self)
-        self.screen_manager.screen3.init_model(self)
-        self.screen_manager.screen4.init_model(self)
+        # передача созданной модели каждому из требуемых окон приложения
+        self.screen_manager.screen2.set_model(self)
+        self.screen_manager.screen3.set_model(self)
+        self.screen_manager.screen4.set_model(self)
         self.actions_list.append("Месяц 1")
 
     def tick(self):
@@ -48,11 +49,11 @@ class Model:
 
         income_deposit = self.market.tick_invested_deposits()
         if income_deposit:
-            self.fund.get_depo_income(income_deposit)
+            self.fund.set_depo_income(income_deposit)
 
         income_bonds = self.market.tick_bonds()
         if income_deposit:
-            self.fund.get_bond_income(income_bonds)
+            self.fund.set_bond_income(income_bonds)
 
         self.fund.update_fund_state()
         self.fund.fund_items_update(old_capital)

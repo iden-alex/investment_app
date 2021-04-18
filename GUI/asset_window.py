@@ -11,7 +11,7 @@ class AssetWindow(Screen):
     Открывается при нажатии на название актива в таблице активов.
     """
 
-    def init_model(self, model):
+    def set_model(self, model):
         self.model = model
 
     def init_asset(self, asset):

@@ -11,7 +11,7 @@ class DepositWindow(Screen):
     Открывается при нажатии на название депозита в таблице депозитов.
     """
 
-    def init_model(self, model):
+    def set_model(self, model):
         self.model = model
 
     def init_deposit(self, deposit):

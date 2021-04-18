@@ -14,7 +14,7 @@ class MainWindow(Screen):
     Класс основного окна с выводом информации о фонде, таблицей активов и кратким меню
     """
 
-    def init_model(self, model):
+    def set_model(self, model):
         self.model = model
         self.update_screen()
 
@@ -194,13 +194,12 @@ class MainWindow(Screen):
 
     def empty_func(self, instance_table, instance_row):
         """
-        Функция-заглушка
+        Функция-заглушка для блокировки действий с таблицей
         """
         pass
 
     def empty_func_end(self):
         """
-        Функция-заглушка
+        Функция-заглушка для блокировки кнопки "Конец хода"
         """
-        print("заглушка")
         pass
