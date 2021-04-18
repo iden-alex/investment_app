@@ -76,8 +76,8 @@ class InvestFund:
             fund_efficency = min(delta / old_capital, 1)
         else:
             fund_efficency = max(delta / old_capital, -1)
-        self.price_fund_item = int(self.total_capital / self.total_fund_items)
-        delta_items = int(
+        self.price_fund_item = round(self.total_capital / self.total_fund_items)
+        delta_items = round(
             FUND_ITEMS_VOLATILITY * fund_efficency * random() * self.total_fund_items
         )
         delta_money = delta_items * self.price_fund_item
@@ -86,7 +86,7 @@ class InvestFund:
         self.total_capital += delta_money
 
         self.total_fund_items += delta_items
-        self.price_fund_item = int(self.total_capital / self.total_fund_items)
+        self.price_fund_item = round(self.total_capital / self.total_fund_items)
 
         if delta_items > 0:
             act = f"Приход паев: {delta_items} шт, +{delta_money} у.е."

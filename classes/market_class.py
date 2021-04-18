@@ -116,12 +116,12 @@ class Market:
                 purch_num -= i
                 self.assets_history[name].append((purch_price, purch_num))
                 if tax > 0:
-                    pay -= int(tax)
+                    pay -= round(tax)
             else:
                 tax = purch_num * (asset.price - purch_price) * self.tax_perc / 100
                 i -= purch_num
                 if tax > 0:
-                    pay -= int(tax)
+                    pay -= round(tax)
         act = f"Продажа {asset.name}: кол-во - {num} шт., цена: {asset.price}, получено после вычета налога: {pay}"
         self.actions_list.append(act)
         return pay
@@ -148,7 +148,7 @@ class Market:
         for deposit in self.fund_deposits:
             deposit.time_left -= 1
             if deposit.time_left < 1:
-                income = int(deposit.sum * (1 + deposit.perc / 100))
+                income = round(deposit.sum * (1 + deposit.perc / 100))
                 self.fund_deposits.remove(deposit)
                 act = f"Начисление депозита по: {deposit.name}(вклад: {deposit.sum}, срок: {deposit.time}, процент: {deposit.perc}, получено: {income})"
                 self.actions_list.append(act)
@@ -200,14 +200,14 @@ class MarketAsset:
             self.price = BOUND_START_PRICE
         else:
             self.percent = 0
-            self.price = int(MAX_INIT_PRICE * random())
-        self.num_in_market = int(MAX_ASSET_COST / self.price)
+            self.price = round(MAX_INIT_PRICE * random())
+        self.num_in_market = round(MAX_ASSET_COST / self.price)
 
     def update_price(self, market_direction):
         """
         Обновление цены актива
         """
-        self.price += int(
+        self.price += round(
             self.asset_volatility
             * (random() * market_direction - PERC_IN_PRICE_CONTRIB * self.percent)
             * self.price
