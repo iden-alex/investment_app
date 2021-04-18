@@ -73,7 +73,7 @@ class Market:
         )
         # инициализация депозитов
         self.deposits = {
-            name: Deposit(name, time, perc) for name, perc, time in DEPOSITS_LIST
+            name: Deposit(name, time_, perc) for name, perc, time_ in DEPOSITS_LIST
         }
         self.fund_deposits = []
         self.invested_deposit_count = 0
@@ -134,10 +134,10 @@ class Market:
         new_name = f"Вложение {self.invested_deposit_count}"
         self.invested_deposit_count += 1
         new_deposit = Deposit(
-            new_name, base_deposit.time, base_deposit.perc, sum_, base_deposit.time
+            new_name, base_deposit.time_, base_deposit.perc, sum_, base_deposit.time_
         )
         self.fund_deposits.append(new_deposit)
-        act = f"Вложение в депозит по: {base_deposit.name} - вклад: {new_deposit.sum_}, срок: {new_deposit.time}, процент: {new_deposit.perc}"
+        act = f"Вложение в депозит по: {base_deposit.name} - вклад: {new_deposit.sum_}, срок: {new_deposit.time_}, процент: {new_deposit.perc}"
         self.actions_list.append(act)
 
     def tick_invested_deposits(self):
@@ -150,7 +150,7 @@ class Market:
             if deposit.time_left < 1:
                 income = round(deposit.sum_ * (1 + deposit.perc / 100))
                 self.fund_deposits.remove(deposit)
-                act = f"Начисление депозита по: {deposit.name}(вклад: {deposit.sum_}, срок: {deposit.time}, процент: {deposit.perc}, получено: {income})"
+                act = f"Начисление депозита по: {deposit.name}(вклад: {deposit.sum_}, срок: {deposit.time_}, процент: {deposit.perc}, получено: {income})"
                 self.actions_list.append(act)
                 all_income += income
         return all_income
@@ -240,9 +240,9 @@ class Deposit:
     Логика отличается от активов, поэтому в отличие от активов нет аналогичных методов.
     """
 
-    def __init__(self, name, time, perc, sum_=0, time_left=0):
+    def __init__(self, name, time_, perc, sum_=0, time_left=0):
         self.name = name
-        self.time = time
+        self.time_ = time_
         self.perc = perc
         self.sum_ = sum_
         self.time_left = time_left

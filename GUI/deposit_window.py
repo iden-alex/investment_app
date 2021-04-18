@@ -19,7 +19,7 @@ class DepositWindow(Screen):
         self.ids.deposit_name.text = deposit.name
 
         self.ids.deposit_perc.text = str(deposit.perc)
-        self.ids.deposit_time.text = str(deposit.time)
+        self.ids.deposit_time.text = str(deposit.time_)
         self.ids.invest.text = str(0)
 
         free_sum = self.model.fund.free_capital
