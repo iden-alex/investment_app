@@ -130,11 +130,11 @@ class MainWindow(Screen):
         """
         self.ids.table2.clear_widgets()
         invested_deposits = [
-            (x.name, x.time, x.perc, x.sum, x.time_left)
+            (x.name, x.time, x.perc, x.sum_, x.time_left)
             for x in self.model.market.fund_deposits
         ]
         deposits_to_buy = [
-            (name, x.time, x.perc, x.sum, x.time_left)
+            (name, x.time, x.perc, x.sum_, x.time_left)
             for name, x in self.model.market.deposits.items()
         ]
         data_deposit = invested_deposits + deposits_to_buy

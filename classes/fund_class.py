@@ -42,7 +42,7 @@ class InvestFund:
         )
         # депозиты
         self.capital_in_deposits = round(
-            sum([deposit.sum for deposit in self.market.fund_deposits])
+            sum([deposit.sum_ for deposit in self.market.fund_deposits])
         )
         self.total_capital = (
             self.free_capital + self.capital_in_deposits + self.capital_in_assets
@@ -95,15 +95,15 @@ class InvestFund:
             act = f"Отток паев: {delta_items} шт, -{delta_money} у.е."
             self.actions_list.append(act)
 
-    def invest_deposit(self, name, sum):
+    def invest_deposit(self, name, sum_):
         """
         Инвестирование в депозит
         """
-        assert self.free_capital >= sum
-        self.free_capital -= sum
-        self.deposit_profit -= sum
+        assert self.free_capital >= sum_
+        self.free_capital -= sum_
+        self.deposit_profit -= sum_
         # создание депозита-вложения
-        self.market.create_investing_deposit(name, sum)
+        self.market.create_investing_deposit(name, sum_)
 
     def set_depo_income(self, income):
         """
